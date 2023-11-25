@@ -4,7 +4,7 @@
 
 #include <BluetoothSerial.h>
 
-//#define USE_NAME // Comment this to use MAC address instead of a slaveName
+#define USE_NAME 1 // Comment this to use MAC address instead of a slaveName
 const char *pin = "1211";  // Change this to reflect the pin expected by the real slave BT device
 
 #if !defined(CONFIG_BT_SPP_ENABLED)
@@ -14,13 +14,13 @@ const char *pin = "1211";  // Change this to reflect the pin expected by the rea
 BluetoothSerial SerialBT;
 
 #ifdef USE_NAME
-String slaveName = "CP_IOT_CAR_CONTROLLER";  // Change this to reflect the real name of your slave BT device
+String slaveName = "CP_IOT_CAR";  // Change this to reflect the real name of your slave BT device
 #else
 String MACadd = "AA:BB:CC:11:22:33";                          // This only for printing
 uint8_t address[6] = { 0xAA, 0xBB, 0xCC, 0x11, 0x22, 0x33 };  // Change this to reflect real MAC address of your slave BT device
 #endif
 
-String myName = "CP_IOT_CAR";
+String myName = "CP_IOT_CAR_Joystick";
 
 bool connected;
 
