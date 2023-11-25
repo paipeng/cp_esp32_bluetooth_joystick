@@ -1,3 +1,6 @@
+#include "CPOledDisplay.h"
+#include "cp_ps2_joystick.h"
+
 
 #include <BluetoothSerial.h>
 
@@ -21,12 +24,27 @@ String myName = "CP_IOT_CAR";
 
 bool connected;
 
+
+
+CPPS2Joystick joystick;
+CPOledDisplay display;
+
 void setup() {
   delay(1000);
   Serial.begin(115200);
 
   Serial.println("Serial inited");
   delay(2000);
+
+  display.init();
+  Serial.println("display inited");
+  delay(200);
+
+
+  joystick.init();
+  Serial.println("joystick inited");
+  delay(200);
+  display.setStatus("joystick inited");
 
   SerialBT.begin(myName, true);
   Serial.printf("The device \"%s\" started in master mode, make sure slave BT device is on!\n", myName.c_str());
@@ -68,9 +86,28 @@ void setup() {
       Serial.println("Failed to reconnect. Make sure remote device is available and in range, then restart app.");
     }
   }
+
+
+  display.setStatus("bluetooth connected");
 }
 
 void loop() {
+#if 1
+  int event = joystick.readMove();
+  if (event == MOVE_DOWN) {
+    SerialBT.write('b');
+    display.setStatus("backward");
+  } else if (event == MOVE_UP) {
+    SerialBT.write('f');
+    display.setStatus("forward");
+  } else if (event == MOVE_LEFT) {
+    SerialBT.write('l');
+    display.setStatus("left");
+  } else if (event == MOVE_RIGHT) {
+    SerialBT.write('r');
+    display.setStatus("right");
+  }
+#else
   if (Serial.available()) {
     SerialBT.write(Serial.read());
   }
@@ -78,4 +115,5 @@ void loop() {
     Serial.write(SerialBT.read());
   }
   delay(20);
+#endif
 }
