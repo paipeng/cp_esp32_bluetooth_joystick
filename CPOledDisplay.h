@@ -2,7 +2,7 @@
 #define _CP_OLED_DISPLAY_H_
 
 #define USE_U8G2 1
-#ifdef USE_U8G2
+#if USE_U8G2
 #include <U8g2lib.h>
 
 #ifdef U8X8_HAVE_HW_SPI
@@ -29,7 +29,7 @@ public:
   void drawTest(const unsigned char* data, int dataLen, int textCount);
   void marquee();
 private:
-#ifdef USE_U8G2
+#if USE_U8G2
   U8G2_SSD1306_128X32_UNIVISION_F_SW_I2C display;
 #else
   SSD1306Wire display;

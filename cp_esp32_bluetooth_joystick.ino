@@ -4,7 +4,7 @@
 
 #include <BluetoothSerial.h>
 
-#define USE_NAME 1 // Comment this to use MAC address instead of a slaveName
+#define USE_NAME 1         // Comment this to use MAC address instead of a slaveName
 const char *pin = "1211";  // Change this to reflect the pin expected by the real slave BT device
 
 #if !defined(CONFIG_BT_SPP_ENABLED)
@@ -28,6 +28,8 @@ bool connected;
 
 CPPS2Joystick joystick;
 CPOledDisplay display;
+
+int car_state = MOVE_NONE;
 
 void setup() {
   delay(1000);
@@ -94,19 +96,26 @@ void setup() {
 void loop() {
 #if 1
   int event = joystick.readMove();
-  if (event == MOVE_DOWN) {
-    SerialBT.write('b');
-    display.setStatus("backward");
-  } else if (event == MOVE_UP) {
-    SerialBT.write('f');
-    display.setStatus("forward");
-  } else if (event == MOVE_LEFT) {
-    SerialBT.write('l');
-    display.setStatus("left");
-  } else if (event == MOVE_RIGHT) {
-    SerialBT.write('r');
-    display.setStatus("right");
+  if (event != car_state) {
+    if (event == MOVE_DOWN) {
+      SerialBT.write('b');
+      display.setStatus("backward");
+    } else if (event == MOVE_UP) {
+      SerialBT.write('f');
+      display.setStatus("forward");
+    } else if (event == MOVE_LEFT) {
+      SerialBT.write('l');
+      display.setStatus("left");
+    } else if (event == MOVE_RIGHT) {
+      SerialBT.write('r');
+      display.setStatus("right");
+    } else {
+      SerialBT.write('s');
+      display.setStatus("stop");
+    }
+    car_state = event;
   }
+
 #else
   if (Serial.available()) {
     SerialBT.write(Serial.read());

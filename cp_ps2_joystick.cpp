@@ -60,7 +60,7 @@ int CPPS2Joystick::readMove() {
     return MOVE_RIGHT;
   } else if (joystick.y > 4000) {
     return MOVE_UP;
-  } else if (joystick.y < 500) {
+  } else if (joystick.y < 1900) {
     return MOVE_DOWN;
   } else {
     return MOVE_NONE;
